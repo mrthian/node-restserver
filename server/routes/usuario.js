@@ -13,8 +13,16 @@ const someOtherPlaintextPassword = 'not_bacon';
 // Importar el usuario
 const Usuario = require('../models/usuario');
 
+// importar middleware con destructuradores
+const { validaToken, validaAdminRole } = require('../middlewares/autenticacion');
+
+
+/** nota
+ * Los middleware se declaran en el segundo parametros
+ */
+
 // ||--> Solicitar datos
-app.get('/usuario', function(req, res) {
+app.get('/usuario', validaToken, (req, res) => {
 
     let desde = Number(req.query.desde) || 0;
     let limite = Number(req.query.limite) || 5;
@@ -31,7 +39,7 @@ app.get('/usuario', function(req, res) {
             }
 
             // Contar registros en la bd
-            Usuario.count({ estado: true }, (err, conteo) => {
+            Usuario.countDocuments({ estado: true }, (err, conteo) => {
                 // retornar mensaje al usuarios
                 res.json({
                     ok: true,
@@ -43,7 +51,7 @@ app.get('/usuario', function(req, res) {
 });
 
 // ||--> Crear nuevo registros
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [validaToken, validaAdminRole], (req, res) => {
 
     let body = req.body;
 
@@ -71,7 +79,7 @@ app.post('/usuario', function(req, res) {
 });
 
 // || --> Actualizar datos
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', validaToken, (req, res) => {
 
     // Capturar los body y filtrar los campos configurables
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
@@ -92,14 +100,13 @@ app.put('/usuario/:id', function(req, res) {
 });
 
 // || --> Borrar registros
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [validaToken, validaAdminRole], (req, res) => {
     // Capturar parametros por url
     let id = req.params.id;
 
     let cambiaEstado = {
         estado: false
-    }
-
+    };
 
     // Buscar y actualizar
     Usuario.findByIdAndUpdate(id, cambiaEstado, (err, usuarioDB) => {

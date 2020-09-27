@@ -2,10 +2,9 @@ require('./config/config');
 
 const express = require('express');
 const mongoose = require('mongoose'); // conexión a mongo d
+const bodyParser = require('body-parser'); // para capturar los parametros del header o form tils
 
 const app = express();
-
-const bodyParser = require('body-parser'); // para capturar los parametros del header o form tils
 
 // ========================================================
 // middleware =============================================
@@ -17,7 +16,10 @@ app.use(bodyParser.json());
 
 // ==================================
 // ROUTES ===========================
-app.use(require('./routes/usuario')); // importar rutas de usuarios
+//app.use(require('./routes/usuario')); // importar rutas de usuarios
+//app.use(require('./routes/login')); // importar rutas de login
+// DECLARACIÓN DE ROUTES
+app.use(require('./routes/index')); // configuración global de routes
 // ==================================
 
 /** ficheros de configuración personal */
@@ -32,6 +34,5 @@ mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useCreateIndex: tru
     if (err) throw err;
     console.log('Base de datos ONLINE');
 });
-
 
 app.listen(port, () => console.log(`Escuchando puerto ${ port }`));
