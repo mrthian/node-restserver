@@ -4,6 +4,9 @@ const express = require('express');
 const mongoose = require('mongoose'); // conexión a mongo d
 const bodyParser = require('body-parser'); // para capturar los parametros del header o form tils
 
+// IMPORTAR PATH PARA PUBLICAR LA WEB
+const path = require('path');
+
 const app = express();
 
 // ========================================================
@@ -13,6 +16,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 // ========================================================
+
+
+// Habilitar la carpeta public || para soliconar error de cargar index. se hace con path
+app.use(express.static(path.resolve(__dirname, '../public')));
+
+
 
 // ==================================
 // ROUTES ===========================
