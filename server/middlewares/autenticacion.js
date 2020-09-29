@@ -35,7 +35,7 @@ let validaAdminRole = (req, res, next) => {
     } else {
         return res.json({
             ok: false,
-            err: { message: 'El role de usuario no esta autorizado para crear' }
+            err: { message: 'El role de usuario no esta autorizado para relizar modificaciones' }
         });
     }
 };
