@@ -90,6 +90,7 @@ app.post('/categoria', validaToken, (req, res) => {
 app.put('/categoria/:id', validaToken, (req, res) => {
 
     let id = req.params.id;
+
     let body = req.body;
 
     let nombreCategoria = { nombre: req.body.nombre };
